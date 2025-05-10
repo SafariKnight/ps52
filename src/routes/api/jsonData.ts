@@ -3,15 +3,13 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 
-const jsonDataFolder = path.join(process.cwd(), "data");
-const jsonData = express.Router();
-
 const dataPath = path.join(__dirname, "../../../data");
+const jsonData = express.Router();
 
 jsonData.get("/data/:filename", (req: Request, res: Response) => {
   const { filename } = req.params;
 
-  const filePath = path.join(jsonDataFolder, filename + ".json");
+  const filePath = path.join(dataPath, filename + ".json");
 
   if (!fs.existsSync(filePath)) {
     res.status(404).json({ message: "File not found" });
@@ -32,7 +30,7 @@ jsonData.post("/data/:filename", (req: Request, res: Response) => {
         .json({ message: "File name is required and must be a string" });
       return;
     }
-    const filePath = path.join(jsonDataFolder, filename + ".json");
+    const filePath = path.join(dataPath, filename + ".json");
     const data = req.body;
     fs.writeFileSync(filePath, JSON.stringify(data), "utf-8");
 
